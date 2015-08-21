@@ -5,6 +5,8 @@ in no more than 4 sentences, briefly introduce your data visualization and add a
 ## Design
 explain any design choices you made including changes to the visualization after collecting feedback
 
+	select pclass,sex,survived,count(*) from titanic_training_data group by pclass,sex,survived order by pclass,sex,survived;
+
 ## Feedback 
 include all feedback you received from others on your visualization from the first sketch to the final visualization
 
