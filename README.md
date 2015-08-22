@@ -8,14 +8,12 @@ destiny of the passenger. So the goal of my visualization is to show
 this correlation. 
 
 ## Design
-explain any design choices you made including changes 
-to the visualization after collecting feedback
 
 First, I started to explore the dataset for correlations between the properties 
 of a passenger and his fate. I found that young female passengers from the first
 class had best chances to survive, whereas male from the third class had the most
 deaths. Exploring the data further I found that the values for sex and passenger 
-class are complete, but for age there are more than 170 missing. That is why I
+class are complete, but for age there are more than 170 values missing. That is why I
 excluded age from my factors for the passenger categories and came up with
 the following 6 passenger categories:
  - male first class
@@ -63,9 +61,9 @@ I interviewed three reader about the chart here is what they said:
  - Maybe it is better to show only survived men or died women
  - Would it be possible to show percent values?
  
-
-
-     
+The feedback drove me to the conclusion to show percent values and let the reader
+switch between survived and died. From this follows that male and female keep their
+color, so no more confusion about the sex. 
 
 
 ## Resources 

@@ -1,14 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!-- http://www.businessinsider.com/the-27-worst-charts-of-all-time-2013-6?op=1&IR=T -->
   <meta charset="utf-8">
   <script src="http://d3js.org/d3.v3.min.js"></script>
   <script src="http://dimplejs.org/dist/dimple.v2.1.6.min.js"></script>
   <style>
-    circle.dimple-series-1 {
-       fill: red;
-    }
     h2 {
        margin-left: 300px;
     }
@@ -34,7 +30,9 @@
 		{"category":"female-3rdclass", "destiny": "died", "passengers": 72} 
     ];
     var chart = new dimple.chart(svg, dataset);
+    // create pairs of bars
     var x_axis=chart.addCategoryAxis("x", ["category", "destiny"]);
+    // we sort by passenger count
     x_axis.addOrderRule(function(a,b) {
 	return a.passengers[2]-b.passengers[2];
     }, false);
@@ -42,12 +40,12 @@
     chart.addSeries("destiny", dimple.plot.bar);
     chart.addLegend(65, 10, 510, 20, "right");
 
+    // wire the legend to change the sort function
     function show() {
 	    chart.draw();
 	
 	    var button_survived=d3.select("g.dimple-legend.dimple-survived");
 	    button_survived.on("click", function(d) {
-	       console.log("click survived...");
 	       x_axis._orderRules=[];
 	       x_axis.addOrderRule(function(a,b) {
 	          return a.passengers[2]-b.passengers[2];
@@ -57,7 +55,6 @@
 	
 	    var button_died=d3.select("g.dimple-legend.dimple-died");
 	    button_died.on("click", function(d) {
-	       console.log("click died...");
 	       x_axis._orderRules=[];
 	       x_axis.addOrderRule(function(a,b) {
 	          return a.passengers[0]-b.passengers[0];
