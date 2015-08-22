@@ -29,9 +29,9 @@ To each category belong the sums how many survived and how many died.
 
 Since position is the best visual encoding for humans to distinguish,
 I chose to use position-y for the number of passengers and the visual 
-encoding color hue to code the destiny: survived or not.A bar chart would match best 
+encoding color hue to code the destiny: survived or not. A bar chart would match best 
 to use position-y and color-hue with pairs of bars for each category:
-one bar for the survivors and one for the dead.
+one bar for the survivors and one for the dead. 
 
 Before I could start with the coding of the chart, I had to gather the
 data for each category. For that I loaded the original data in a sql database
@@ -39,10 +39,36 @@ and generated the grouped values with the following statement:
 
 	select pclass,sex,survived,count(*) from titanic_training_data group by pclass,sex,survived order by pclass,sex,survived;
 
-Then 
+Then I used dimple.js to create the bar chart. Since I want to show the correlation between
+ the categories and survival, the categories should be sorted by survived or died, depending
+ on user interaction: a click on the legend would change the sort order to the correspondig destiny.
+ Of course dimple.js shows automatically nice tooltips and a connection to the axis for the bar
+ the mouse is over. 
 
-## Feedback 
-include all feedback you received from others on your visualization from the first sketch to the final visualization
+## Feedback
+I interviewed three reader about the chart here is what they said:
+
+### Reader 1:
+ - The colors are confusing, because usually blue means male and red means female and here they mean survived or died
+ - Maybe percent values would make the passenger classes (or categories) more comparable
+ - The message is not quite clear
+ - Instead of letting the reader switch the sorting, the reader could switch between absolute and percent values
+ 
+### Reader 2:
+ - The chart and the message are quite clear
+ - Absolute values are best
+
+### Reader 3:
+ - Why do the bar-pairs not match: some blue bars are men, some are women?
+ - Maybe it is better to show only survived men or died women
+ - Would it be possible to show percent values?
+ 
+
+
+     
+
 
 ## Resources 
-list any sources you consulted to create your visualization
+ - www.dimplejs.org
+ - www.d3js.org
+
