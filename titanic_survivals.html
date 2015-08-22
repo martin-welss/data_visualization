@@ -13,60 +13,68 @@
 <body>
   <div>
   <h2>Titanic Survivals</h2>
+  <button id="show_survived" type="button">show survived</button>
+  <button id="show_died" type="button">show died</button>
   <script type="text/javascript">
     var svg = dimple.newSvg("body", 800, 600);
-    var dataset = [
-		{"category":"male-1stclass", "destiny": "survived",  "passengers": 45}, 
-		{"category":"male-1stclass", "destiny": "died", "passengers": 77}, 
-		{"category":"female-1stclass", "destiny": "survived",  "passengers": 91}, 
-		{"category":"female-1stclass", "destiny": "died", "passengers": 3}, 
-		{"category":"male-2ndclass", "destiny": "survived",  "passengers": 17}, 
-		{"category":"male-2ndclass", "destiny": "died", "passengers": 91}, 
-		{"category":"female-2ndclass", "destiny": "survived",  "passengers": 70}, 
-		{"category":"female-2ndclass", "destiny": "died", "passengers": 6}, 
-		{"category":"male-3rdclass", "destiny": "survived",  "passengers": 47}, 
-		{"category":"male-3rdclass", "destiny": "died", "passengers": 300}, 
-		{"category":"female-3rdclass", "destiny": "survived",  "passengers": 72}, 
-		{"category":"female-3rdclass", "destiny": "died", "passengers": 72} 
+    var dataset_survived = [
+        {"category":"1stclass", "sex": "male", "destiny": "survived",  "percent": 37}, 
+        {"category":"1stclass", "sex": "female", "destiny": "survived",  "percent": 97}, 
+        {"category":"2ndclass", "sex": "male", "destiny": "survived",  "percent": 16}, 
+        {"category":"2ndclass", "sex": "female", "destiny": "survived",  "percent": 92}, 
+        {"category":"3rdclass", "sex": "male", "destiny": "survived",  "percent": 13}, 
+        {"category":"3rdclass", "sex": "female", "destiny": "survived",  "percent": 50} 
     ];
+    var dataset_died = [
+        {"category":"1stclass", "sex": "male", "destiny": "died", "percent": 63}, 
+        {"category":"1stclass", "sex": "female", "destiny": "died", "percent": 3}, 
+        {"category":"2ndclass", "sex": "male", "destiny": "died", "percent": 84}, 
+        {"category":"2ndclass", "sex": "female", "destiny": "died", "percent": 8}, 
+        {"category":"3rdclass", "sex": "male", "destiny": "died", "percent": 87}, 
+        {"category":"3rdclass", "sex": "female", "destiny": "died", "percent": 50} 
+    ];
+    var dataset = dataset_survived;
     var chart = new dimple.chart(svg, dataset);
     // create pairs of bars
-    var x_axis=chart.addCategoryAxis("x", ["category", "destiny"]);
-    // we sort by passenger count
-    x_axis.addOrderRule(function(a,b) {
-	return a.passengers[2]-b.passengers[2];
-    }, false);
-    chart.addMeasureAxis("y", "passengers");
-    chart.addSeries("destiny", dimple.plot.bar);
+    var x_axis=chart.addCategoryAxis("x", ["category", "sex"]);
+    // we add a fixed order
+    x_axis.addOrderRule(["1stclass", "2ndclass", "3rdclass"], false);
+    x_axis.addGroupOrderRule(["female","male"]);
+    y_axis = chart.addMeasureAxis("y", "percent");
+    chart.addSeries("sex", dimple.plot.bar);
     chart.addLegend(65, 10, 510, 20, "right");
+    chart.assignColor("male","lightblue");
+    chart.assignColor("female","plum");
 
-    // wire the legend to change the sort function
+
     function show() {
-	    chart.draw();
-	
-	    var button_survived=d3.select("g.dimple-legend.dimple-survived");
-	    button_survived.on("click", function(d) {
-	       x_axis._orderRules=[];
-	       x_axis.addOrderRule(function(a,b) {
-	          return a.passengers[2]-b.passengers[2];
-	       }, false);
-	       show();
-	    });
-	
-	    var button_died=d3.select("g.dimple-legend.dimple-died");
-	    button_died.on("click", function(d) {
-	       x_axis._orderRules=[];
-	       x_axis.addOrderRule(function(a,b) {
-	          return a.passengers[0]-b.passengers[0];
-	       }, false);
-	       show();
-	    });
+        // use 1000 for smooth transitions
+        chart.draw(1000);
+        if(chart.data===dataset_survived) {
+            y_axis.titleShape.text("passengers survived %");
+        } else {
+            y_axis.titleShape.text("passengers died %");
+        }
+
+    
+        var button_survived=d3.select("#show_survived");
+        button_survived.on("click", function(d) {
+           console.log("click survived");
+           chart.data=dataset_survived;
+           show();
+        });
+    
+        var button_died=d3.select("#show_died");
+        button_died.on("click", function(d) {
+           console.log("click died");
+           chart.data=dataset_died;
+           show();
+        });
     }
     show();
 
   </script>
   </div>
   <br>
-  Click on the legend to switch sort order.
 </body>
 </html>
