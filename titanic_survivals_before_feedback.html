@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.1.6.min.js"></script>
+  <style>
+    h2 {
+       margin-left: 300px;
+    }
+  </style>
+</head>
+<body>
+  <div>
+  <h2>Titanic Survivals</h2>
+  <script type="text/javascript">
+    var svg = dimple.newSvg("body", 800, 600);
+    var dataset = [
+		{"category":"male-1stclass", "destiny": "survived",  "passengers": 45}, 
+		{"category":"male-1stclass", "destiny": "died", "passengers": 77}, 
+		{"category":"female-1stclass", "destiny": "survived",  "passengers": 91}, 
+		{"category":"female-1stclass", "destiny": "died", "passengers": 3}, 
+		{"category":"male-2ndclass", "destiny": "survived",  "passengers": 17}, 
+		{"category":"male-2ndclass", "destiny": "died", "passengers": 91}, 
+		{"category":"female-2ndclass", "destiny": "survived",  "passengers": 70}, 
+		{"category":"female-2ndclass", "destiny": "died", "passengers": 6}, 
+		{"category":"male-3rdclass", "destiny": "survived",  "passengers": 47}, 
+		{"category":"male-3rdclass", "destiny": "died", "passengers": 300}, 
+		{"category":"female-3rdclass", "destiny": "survived",  "passengers": 72}, 
+		{"category":"female-3rdclass", "destiny": "died", "passengers": 72} 
+    ];
+    var chart = new dimple.chart(svg, dataset);
+    // create pairs of bars
+    var x_axis=chart.addCategoryAxis("x", ["category", "destiny"]);
+    // we sort by passenger count
+    x_axis.addOrderRule(function(a,b) {
+	return a.passengers[2]-b.passengers[2];
+    }, false);
+    chart.addMeasureAxis("y", "passengers");
+    chart.addSeries("destiny", dimple.plot.bar);
+    chart.addLegend(65, 10, 510, 20, "right");
+
+    // wire the legend to change the sort function
+    function show() {
+	    chart.draw();
+	
+	    var button_survived=d3.select("g.dimple-legend.dimple-survived");
+	    button_survived.on("click", function(d) {
+	       x_axis._orderRules=[];
+	       x_axis.addOrderRule(function(a,b) {
+	          return a.passengers[2]-b.passengers[2];
+	       }, false);
+	       show();
+	    });
+	
+	    var button_died=d3.select("g.dimple-legend.dimple-died");
+	    button_died.on("click", function(d) {
+	       x_axis._orderRules=[];
+	       x_axis.addOrderRule(function(a,b) {
+	          return a.passengers[0]-b.passengers[0];
+	       }, false);
+	       show();
+	    });
+    }
+    show();
+
+  </script>
+  </div>
+  <br>
+  Click on the legend to switch sort order.
+</body>
+</html>
